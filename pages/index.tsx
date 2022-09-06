@@ -4,28 +4,42 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import fetch from 'make-fetch-happen'
 import streamarray from 'stream-json/streamers/StreamArray'
+import Batch from 'stream-json/utils/Batch'
+import { chain } from 'stream-chain'
 import * as redis from 'redis';
 
 export async function getStaticProps(context) {
 
-  const bulk_data_req = await fetch('https://api.scryfall.com/bulk-data', { cachePath: './cache', cache: 'force-cache' })
+  // const bulk_data_req = await fetch('https://api.scryfall.com/bulk-data', { cachePath: './cache', cache: 'force-cache' })
 
-  const bulk_data = await bulk_data_req.json()
-  const bulk_data_uri = bulk_data['data'][3]['download_uri']
+  // const bulk_data = await bulk_data_req.json()
+  // const bulk_data_uri = bulk_data['data'][3]['download_uri']
 
-  const all_cards_request = await fetch(bulk_data_uri, { cachePath: './cache', cache: 'force-cache' })
+  // const all_cards_request = await fetch(bulk_data_uri, { cachePath: './cache', cache: 'force-cache' })
 
-  const pipeline = all_cards_request.body.pipe(streamarray.withParser());
-  const client = redis.createClient({});
-  client.connect();
-  client.on('connect', () => console.log('connected to redis successfully!'));
-  client.on('error', (err) => console.log('Redis Client Error', err));
+  // // const pipeline = all_cards_request.body.pipe(streamarray.withParser());
 
-  // await client.set('key', 'value');
+  // const pipeline = chain([all_cards_request.body.pipe(streamarray.withParser()), new Batch({ batchSize: 1000 })])
 
-  pipeline.on('data', async data => {
-    await client.json.set(data['value']['id'], '.', data['value'])
-  })
+  // // const pipeline = chain([ fs.createReadStream('sample.json'), StreamArray.withParser(), new Batch({batchSize: 100}) ]);
+  // const client = redis.createClient({});
+  // client.connect();
+  // client.on('connect', () => console.log('connected to redis successfully!'));
+  // client.on('error', (err) => console.log('Redis Client Error', err));
+
+  // // await client.set('key', 'value');
+
+  // var batchSize = 0
+
+  // pipeline.on('data', data => {
+  //   console.log(batchSize + ' processing ' + data[0]['value']['id'])
+  //   data.forEach(element => {
+  //     client.json.set(element['value']['id'], '.', element['value'])
+  //   });
+  //   batchSize += 1000
+
+  // })
+  // pipeline.on('end', data => { console.log('finished redis pipeline') })
 
   // let objectCounter = 0;
   // parser.on('data', data => console.log(data));

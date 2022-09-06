@@ -1,0 +1,3 @@
+[submodule "collection-tracker-redis"]
+	path = collection-tracker-redis
+	url = https://github.com/bearsdotzone/collection-tracker-redis.git

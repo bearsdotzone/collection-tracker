@@ -2,60 +2,49 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import fetch from 'make-fetch-happen'
-import streamarray from 'stream-json/streamers/StreamArray'
-import Batch from 'stream-json/utils/Batch'
-import { chain } from 'stream-chain'
-import * as redis from 'redis';
+import { createClient, SchemaFieldTypes, SearchOptions } from 'redis';
+import React, { useState, useEffect } from 'react'
+import useSWR from 'swr'
 
-export async function getStaticProps(context) {
+// export async function getStaticProps(context) {
 
-  // const bulk_data_req = await fetch('https://api.scryfall.com/bulk-data', { cachePath: './cache', cache: 'force-cache' })
-
-  // const bulk_data = await bulk_data_req.json()
-  // const bulk_data_uri = bulk_data['data'][3]['download_uri']
-
-  // const all_cards_request = await fetch(bulk_data_uri, { cachePath: './cache', cache: 'force-cache' })
-
-  // // const pipeline = all_cards_request.body.pipe(streamarray.withParser());
-
-  // const pipeline = chain([all_cards_request.body.pipe(streamarray.withParser()), new Batch({ batchSize: 1000 })])
-
-  // // const pipeline = chain([ fs.createReadStream('sample.json'), StreamArray.withParser(), new Batch({batchSize: 100}) ]);
-  // const client = redis.createClient({});
-  // client.connect();
-  // client.on('connect', () => console.log('connected to redis successfully!'));
-  // client.on('error', (err) => console.log('Redis Client Error', err));
-
-  // // await client.set('key', 'value');
-
-  // var batchSize = 0
-
-  // pipeline.on('data', data => {
-  //   console.log(batchSize + ' processing ' + data[0]['value']['id'])
-  //   data.forEach(element => {
-  //     client.json.set(element['value']['id'], '.', element['value'])
-  //   });
-  //   batchSize += 1000
-
-  // })
-  // pipeline.on('end', data => { console.log('finished redis pipeline') })
-
-  // let objectCounter = 0;
-  // parser.on('data', data => console.log(data));
-  // parser.on('end', () => console.log(`Found ${objectCounter} objects.`));
-
-  // all_cards_request.body.pipe(parser);
-
-  // const all_cards = await all_cards_request.json()
-
-  return {
-    props: { uri: "test" }, // will be passed to the page component as props
-  }
-}
+//   const client = createClient({});
+//   client.connect();
+//   client.on('connect', () => console.log('connected to redis successfully!'));
+//   client.on('error', (err) => console.log('Redis Client Error', err));
 
 
-const Home: NextPage = ({ uri }) => {
+//   var output = await client.ft.search('idx:cards', '@type_line:Bear');
+
+//   var foundNames = []
+//   output['documents'].forEach(element => {
+//     foundNames.push(element['value']['name'])
+//   });
+
+//   return {
+//     props: { uri: foundNames }, // will be passed to the page component as props
+//   }
+// }
+
+const Home: React.FC = () => {
+
+  const [content, setContent] = useState('');
+  const [results, setResults] = useState([]);
+
+  // var out = useSWR('/api/search?q=' + content)
+
+  const submitData = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
+    const api_req = await fetch('/api/search?q=' + content)
+    
+    const api_res = await api_req.json()
+
+    setResults(api_res)
+
+
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -65,44 +54,21 @@ const Home: NextPage = ({ uri }) => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.tsx</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>{uri}</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+        <form onSubmit={submitData}>
+        <textarea
+            cols={20}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Query"
+            rows={1}
+            value={content}
+          />
+        <button disabled={!content} type="submit">Submit</button>
+        </form>
+        <ul>
+          {
+            results.map(item => (<li key={item['id']}>{item['printed_name'] || item['name']}</li>))
+          }
+        </ul>
       </main>
 
       <footer className={styles.footer}>

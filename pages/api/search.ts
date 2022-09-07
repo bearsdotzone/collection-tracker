@@ -16,12 +16,15 @@ export default async function handler(
     }
 
     var query_results = await client.ft.search('idx:cards', req.query['q'].toString())
+    await client.quit()
+    if (query_results.total == 0) {
+        return res.status(204).end()
+    }
+
     var query_values = []
     query_results['documents'].forEach(element => {
         query_values.push(element['value'])
     });
-
-    await client.quit()
 
     return res.status(200).json(query_values)
 }

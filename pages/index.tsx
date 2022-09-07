@@ -4,7 +4,6 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { createClient, SchemaFieldTypes, SearchOptions } from 'redis';
 import React, { useState, useEffect } from 'react'
-import useSWR from 'swr'
 
 // export async function getStaticProps(context) {
 

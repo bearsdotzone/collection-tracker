@@ -1,0 +1,12 @@
+.searchsidebar {
+  position: static;
+  top: 0rem;
+  padding: 1pt;
+  text-align: center;
+  background-color: rgba(200, 200, 200, 0.5);
+  padding: 1rem 1rem 1rem 1rem;
+  align-items: center;
+  width: 30rem;
+  height: 100vh;
+  float: left;
+}

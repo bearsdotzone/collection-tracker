@@ -1,9 +1,9 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import { createClient, SchemaFieldTypes, SearchOptions } from 'redis';
-import React, { useState, useEffect } from 'react'
+import type { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import { createClient, SchemaFieldTypes, SearchOptions } from "redis";
+import React, { useState, useEffect } from "react";
 
 // export async function getStaticProps(context) {
 
@@ -11,7 +11,6 @@ import React, { useState, useEffect } from 'react'
 //   client.connect();
 //   client.on('connect', () => console.log('connected to redis successfully!'));
 //   client.on('error', (err) => console.log('Redis Client Error', err));
-
 
 //   var output = await client.ft.search('idx:cards', '@type_line:Bear');
 
@@ -26,8 +25,7 @@ import React, { useState, useEffect } from 'react'
 // }
 
 const Home: React.FC = () => {
-
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
   const [results, setResults] = useState([]);
 
   // var out = useSWR('/api/search?q=' + content)
@@ -35,13 +33,11 @@ const Home: React.FC = () => {
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    const api_req = await fetch('/api/search?q=' + content)
-    
-    const api_res = await api_req.json()
+    const api_req = await fetch("/api/search?q=" + content);
 
-    setResults(api_res)
+    const api_res = await api_req.json();
 
-
+    setResults(api_res);
   };
 
   return (
@@ -52,23 +48,7 @@ const Home: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <form onSubmit={submitData}>
-        <textarea
-            cols={20}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Query"
-            rows={1}
-            value={content}
-          />
-        <button disabled={!content} type="submit">Submit</button>
-        </form>
-        <ul>
-          {
-            results.map(item => (<li key={item['id']}>{item['printed_name'] || item['name']}</li>))
-          }
-        </ul>
-      </main>
+      <main className={styles.main}></main>
 
       <footer className={styles.footer}>
         <a
@@ -76,14 +56,14 @@ const Home: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <span className={styles.logo}>
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>
         </a>
       </footer>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

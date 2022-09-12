@@ -4,6 +4,10 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { createClient, SchemaFieldTypes, SearchOptions } from "redis";
 import React, { useState, useEffect } from "react";
+import Header from "../components/common/Header";
+import Footer from "../components/common/Footer";
+
+import SearchSidebar from "../components/common/SearchSidebar";
 
 // export async function getStaticProps(context) {
 
@@ -44,24 +48,17 @@ const Home: React.FC = () => {
     <div className={styles.container}>
       <Head>
         <title>Create Next App</title>
-        <meta name="description" content="lmao" />
+        <meta name="description" content="Collection Tracker" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}></main>
+      <Header />
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
+      <main className={styles.main}>
+        <SearchSidebar />
+      </main>
+
+      <Footer />
     </div>
   );
 };

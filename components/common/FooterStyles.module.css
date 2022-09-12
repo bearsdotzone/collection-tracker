@@ -1,0 +1,8 @@
+.footer {
+  /* float: top; */
+  width: 100vw;
+  background-color: bisque;
+  color: black;
+  text-align: center;
+  align-self: flex-end;
+}

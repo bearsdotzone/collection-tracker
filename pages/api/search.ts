@@ -1,21 +1,19 @@
 import { createClient, SchemaFieldTypes, SearchOptions } from 'redis';
 import { NextApiRequest, NextApiResponse } from 'next';
 import SearchQuery, { SearchParserResult } from 'search-query-parser'
-// import { unstable_getServerSession } from "next-auth/next"
-// import authHandler from "./auth/[...nextauth]"
+import { unstable_getServerSession } from "next-auth/next"
+import { options } from "./auth/[...nextauth]";
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
 
-    // const session = await unstable_getServerSession(req, res, authHandler)
+    const session = await unstable_getServerSession(req, res, options)
 
-    // if (!session) {
-    //     return res.send({
-    //         error: "You must be signed in to view the protected content on this page.",
-    //     })
-    // }
+    if (!session) {
+        return res.status(401).end()
+    }
 
     const client = createClient({});
     client.connect();

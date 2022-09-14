@@ -1,4 +1,4 @@
-import styles from "./SearchSidebarStyles.module.css";
+import styles from "../../styles/SearchSidebarStyles.module.css";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import SearchResult from "./SearchResult";
@@ -16,6 +16,11 @@ const SearchSidebar: React.FC = () => {
 
     if (api_req.status == 204) {
       setResults([{ name: "No Results" }]);
+      return;
+    }
+
+    if (api_req.status == 401) {
+      setResults([{ name: "Please Login" }]);
       return;
     }
 

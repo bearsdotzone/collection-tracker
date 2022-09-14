@@ -1,5 +1,4 @@
-import styles from "./SearchResultStyles.module.css";
-
+import styles from "../../styles/SearchResultStyles.module.css";
 function SearchResult({ name, foil = true, nonfoil = true }) {
   return (
     <div>
